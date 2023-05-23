@@ -6,13 +6,14 @@ import css from './ContactForm.module.css';
 const ContactForm = () => {
   const dispatch = useDispatch();
   const getContacts = useSelector(state => state.contacts);
-  const newContact = data => {
+  const newContact = (data, event) => {
     getContacts.some(
       contacts => contacts.name.toLowerCase() === data.name.toLowerCase()
     )
       ? window.alert(data.name + ' is already in contacts')
-      : dispatch(addContact(data));
+      : dispatch(addContact(data)) && event.target.reset();
   };
+
   const handleSubmit = event => {
     event.preventDefault();
     const nameData = {
@@ -20,8 +21,7 @@ const ContactForm = () => {
       id: nanoid(),
       number: event.currentTarget.elements.number.value.toString(),
     };
-    newContact(nameData);
-    event.target.reset();
+    newContact(nameData, event);
   };
 
   return (
